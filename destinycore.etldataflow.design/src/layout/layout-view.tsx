@@ -1,3 +1,5 @@
+import "./layout-view.less"
+
 import React, { Component } from "react";
 
 import { BrowserRouter } from "react-router-dom";
@@ -24,7 +26,7 @@ export default class LayoutView extends Component<IProp, { routes:IMenuRoute[] }
     }
     render() {
         return (
-            <Layout className="sukt-layout">
+            <Layout className="etl-layout">
                 <BrowserRouter>
                     <LayoutSider menus={menuList} />
                     <Layout>
