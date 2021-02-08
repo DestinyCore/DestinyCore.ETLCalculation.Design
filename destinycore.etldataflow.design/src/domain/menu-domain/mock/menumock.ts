@@ -22,8 +22,8 @@ export const menuList: IMenuOpInst[] = [
     {
       id: "132445765",
       name: "測試",
-      path: "/test-page",
-      component: "pages/test-page/test-page",
+      path: "/etlflow-design",
+      component: "pages/etlflow-design/etlflow-design",
       tabs: [],
       buttonClick: "",
       buttons: [],

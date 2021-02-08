@@ -8,6 +8,10 @@ import LayoutView from "../layout/layout-view";
 import React from "react";
 import { asyncComponent as async } from "./asyncComponent";
 import { renderRoutes } from "react-router-config";
+import store from "@/store"
+
+//导入状态管理仓库
+
 
 const MainRouter: IMenuRoute[] = [
   {
@@ -50,7 +54,7 @@ class DynamicAuthRouter extends React.Component<IProp> {
     return childRouter
   }
   filterMain() {
-    const menu: IMenuOpInst[] = []; //store.getState().user.menu;
+    const menu: IMenuOpInst[] = store.getState().user.menu;
     const menus = this.handleRouters(menu);
     MainRouter[0].children = [...MainRouter[0].children, ...menus];
   }
