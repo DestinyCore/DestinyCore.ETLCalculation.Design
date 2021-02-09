@@ -48,8 +48,8 @@ const {
           loader: 'style-resources-loader',
           options: {
             patterns: [
-              path.resolve(__dirname, 'src/assets/styles/reset.less'),
-              path.resolve(__dirname, 'src/assets/styles/common.less')
+              path.resolve(__dirname, 'assets/styles/reset.less'),
+              path.resolve(__dirname, 'assets/styles/common.less')
             ]//全局引入公共的scss 文件
           }
         })
