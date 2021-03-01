@@ -56,25 +56,16 @@ class GraphPage extends React.Component {
      * 双击节点事件
      */
     this.graph.on("node:dblclick", ({ node }) => {
-      console.log(node);
+      console.log(node)
       if ((node.data as NodeDataEntity).nodeType !== NodeTypeEnum.workNode) {
         message.warning(
           typeof node.data.nodeType !== "undefined" &&
-            // node.data.nodeType === NodeTypeEnum.startNode
-            // ? "开始节点不允许配置属性!"
-            // : 
-            "结束节点不允许配置属性!",
+            node.data.nodeType === NodeTypeEnum.startNode
+            ? "开始节点不允许配置属性!": "结束节点不允许配置属性!",
           3
         );
         return;
       }
-      // this.nodeOperateInfo.Show(this.getNodeEntity(node));
-    });
-    /**
-     * 双击节点事件
-     */
-    this.graph.on("edge:dblclick", ({ edge }) => {
-      // console.log(this.getLineEntity(edge))
       // this.nodeOperateInfo.Show(this.getNodeEntity(node));
     });
     /**

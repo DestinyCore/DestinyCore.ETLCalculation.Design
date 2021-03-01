@@ -145,6 +145,7 @@ export const circleNodeBaseConfig = {
         label: {
             fontSize: 12,
             fill: 'black',
+            fontWeight: "bold"
         },
         ...circleBody,
         image: {
@@ -170,6 +171,10 @@ export const circleNodeBaseConfig = {
         {
             tagName: "image",
             selector: "image"
+        },
+        {
+            tagName: "text",
+            selector: "label"
         }
     ],
     ...nodePortsConfig,

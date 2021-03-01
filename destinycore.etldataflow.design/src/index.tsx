@@ -12,7 +12,7 @@ const token = localStorage.getItem("token");
 if (!!token) {
   store.dispatch({
     type: USER_MENU,
-    data: require("@/router/constans/menuindexmock").default
+    data: require("@/domain/menu-domain/mock/menumock").menuList
   });
 }
 

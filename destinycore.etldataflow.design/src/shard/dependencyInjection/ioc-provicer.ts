@@ -8,4 +8,4 @@ export default function Provider<T>(params: interfaces.ServiceIdentifier<T>) {
     target[attr] = container.get<T>(params);
     return target[attr];
   };
-}
+} 
