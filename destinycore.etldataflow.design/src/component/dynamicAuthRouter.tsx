@@ -1,4 +1,4 @@
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, withRouter } from "react-router-dom";
 
 import { Guid } from "guid-typescript";
 import HomePage from "../pages/home-page/home-page";
@@ -6,7 +6,9 @@ import { IMenuOpInst } from "../domain/menu-domain/menu-entities/IMenu";
 import { IMenuRoute } from "../domain/menu-domain/menu-entities/imenurouter";
 import LayoutView from "../layout/layout-view";
 import React from "react";
+import { USER_MENU } from "@/store/actionType";
 import { asyncComponent as async } from "./asyncComponent";
+import message from "antd/lib/message";
 import { renderRoutes } from "react-router-config";
 import store from "@/store"
 
@@ -38,7 +40,7 @@ interface IProp {
 /**
  * 动态路由组件
  */
-class DynamicAuthRouter extends React.Component<IProp> {
+class DynamicAuthRouter extends React.Component<any> {
   handleRouters(menu: IMenuOpInst[]) {
     let childRouter: IMenuRoute[] = [];
     menu.forEach((item) => {
@@ -53,25 +55,46 @@ class DynamicAuthRouter extends React.Component<IProp> {
     })
     return childRouter
   }
+  async getMenus() {
+    try {
+      // let res = await this.menus.getMenus();
+      // if (res.success) {
+      // this.menus.setMenus(res.data);
+      await store.dispatch({
+        type: USER_MENU,
+        // data: this.menus.menusByShow
+        data: require("@/domain/menu-domain/mock/menumock").menuList
+      })
+      // message.success(res.message);
+      // } else {
+      //   message.error(res.message);
+      // }
+
+    } catch (error) {
+      message.error(error);
+    }
+  }
   filterMain() {
     const menu: IMenuOpInst[] = store.getState().user.menu;
     const menus = this.handleRouters(menu);
     MainRouter[0].children = [...MainRouter[0].children, ...menus];
   }
   render() {
-    const { config } = this.props;
+    const { config,location } = this.props;
     const { pathname } = window.location;
     const targetRouterConfig = config.find((item: IMenuRoute) => item.path === pathname);
     const token = localStorage.getItem("token");
     if (!!token) {
+      this.getMenus();
       if (pathname === "/login" || pathname === "/") {
         if (MainRouter[0].children.length === 1) {
           this.filterMain();
           return (<>
-            { renderRoutes(MainRouter)}
-            < Redirect to="/home" />
+            {renderRoutes(MainRouter)}
+            <Redirect to="/home" />
           </>)
         } else {
+
           return <Redirect to="/home" />
         }
       } else {
@@ -97,12 +120,10 @@ class DynamicAuthRouter extends React.Component<IProp> {
           } else {// 不包含则进入404
             return (
               <>
-                {
-                  config.map((route: IMenuRoute) => {
-                    return <Route exact={true} key={route.id} path={route.path} component={route.component} />
-                  })
-                }
-                < Redirect to='/404' />
+                {config.map((route: IMenuRoute) => {
+                  return <Route exact={true} key={route.id} path={route.path} component={route.component} />
+                })}
+                <Redirect to='/404' />
               </>
             )
           }
@@ -110,32 +131,29 @@ class DynamicAuthRouter extends React.Component<IProp> {
 
       }
     } else {  // 非登录状态
+      
       if (pathname.includes("callback")) {
-        const { hash } = window.location;
+        const { hash } = location;
         const path = `${pathname}${hash}`
         return (
           <>
-            {
-              config.map((route: IMenuRoute) => {
-                return <Route exact={true} key={route.id} path={route.path} component={route.component} />
-              })
-            }
-            < Redirect to={path} />
+            {config.map((route: IMenuRoute) => {
+              return <Route exact={true} key={route.id} path={route.path} component={route.component} />
+            })}
+            <Redirect to={path} />
           </>
         )
       } else {
         return (
           <>
-            {
-              config.map((route: IMenuRoute) => {
-                return <Route exact={true} key={route.id} path={route.path} component={route.component} />
-              })
-            }
-            < Redirect to='/login' />
+            {config.map((route: IMenuRoute) => {
+              return <Route exact={true} key={route.id} path={route.path} component={route.component} />
+            })}
+            <Redirect to='/login' />
           </>
         )
       }
     }
   }
 }
-export default DynamicAuthRouter;
+export default withRouter(DynamicAuthRouter)
