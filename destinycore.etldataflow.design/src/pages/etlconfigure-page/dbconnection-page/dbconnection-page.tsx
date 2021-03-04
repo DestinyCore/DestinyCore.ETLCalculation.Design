@@ -7,7 +7,7 @@ import useHookProvider from "@/shard/dependencyInjection/ioc-hook-provider"
 
 const Dbconnectionpage = () => {
   const _dbconnectionservice: IDbConnectionService = useHookProvider(IocTypes.DbConnectionService);
-  const [tabledata, settableData] = useState(Array<any>());
+  const [tabledata, settableData] = useState<Array<any>>([]);
   const columns = [
     
     {
@@ -25,13 +25,16 @@ const Dbconnectionpage = () => {
   ];
   useEffect( () => {
     getTable();
+    // debugger
     console.log(1+1)
   })
   const getTable= async () => {
     try {
+      debugger
       const res =await _dbconnectionservice.getPage();
       if(res.success)
       {
+        // debugger
         settableData(res.data)
       }
     } catch (error) {
