@@ -20,7 +20,7 @@ const codeMessage: any = {
 };
 
 const _axiosConfig = {
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: process.env.REACT_APP_BASE_API,
   timeout: 60 * 1000,
 };
 const token = localStorage.getItem("token") || "";

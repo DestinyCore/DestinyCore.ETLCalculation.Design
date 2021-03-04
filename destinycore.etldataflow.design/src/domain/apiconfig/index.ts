@@ -1,3 +1,3 @@
 export const DbconnApi = {
-    getpage: "/api/Menu/GetLoadFromMenuAsync",
+    getpage: "/etl/DBConnection/GetPageLoadAsync",
   }

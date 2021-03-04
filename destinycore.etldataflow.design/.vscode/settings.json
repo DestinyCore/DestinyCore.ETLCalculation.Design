@@ -24,6 +24,7 @@
         "nodedata",
         "resizecontainer",
         "resizeheight",
-        "resizewidth"
+        "resizewidth",
+        "tabledata"
     ]
 }
