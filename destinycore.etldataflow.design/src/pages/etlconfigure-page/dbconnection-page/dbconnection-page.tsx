@@ -1,49 +1,61 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
+import { PaginationProps, Table, message } from 'antd';
 import React, { useEffect, useState } from 'react'
-import { Table, message } from 'antd';
 
 import IDbConnectionService from '@/domain/dbconnection-domain/dbconnection-service/idbconnectionservice';
 import { IocTypes } from '@/shard/inversionofcontrol/ioc-config-types';
+import {initPaginationConfig} from "@/shard/ajax/request"
 import useHookProvider from "@/shard/dependencyInjection/ioc-hook-provider"
 
 const Dbconnectionpage = () => {
   const _dbconnectionservice: IDbConnectionService = useHookProvider(IocTypes.DbConnectionService);
-  const [tabledata, settableData] = useState<Array<any>>([]);
+  const [tableData, setTableData] = useState([]);
+  const [pagination, setPagination] = useState<PaginationProps>(initPaginationConfig);
   const columns = [
-    
+
     {
-      title: 'Name',
+      title: '链接名称',
       dataIndex: 'connectionName',
+      key: "connectionName"
     },
     {
-      title: 'Age',
+      title: '密码',
       dataIndex: 'passWord',
+      key: "passWord"
     },
     {
-      title: 'Address',
+      title: '主机',
       dataIndex: 'host',
+      key: "host"
     },
   ];
-  useEffect( () => {
+  useEffect(() => {
     getTable();
-    // debugger
-    console.log(1+1)
-  })
-  const getTable= async () => {
+  }, [pagination])
+  const getTable = async () => {
     try {
-      debugger
-      const res =await _dbconnectionservice.getPage();
-      if(res.success)
-      {
-        // debugger
-        settableData(res.data)
-      }
+      _dbconnectionservice.getPage().then(x => {
+        if (x.success) {
+          setPagination((Pagination)=>{
+            Pagination.total=x.total;
+            return Pagination;
+          })
+          x.data.map((item: any, index: number) => {
+            item.key = item.id;
+            return item;
+          })
+          setTableData(x.data)
+        }
+      });
+
     } catch (error) {
       message.error(error)
     }
   }
   return (
     <div>
-      <Table bordered columns={columns} dataSource={tabledata} />;
+      <Table bordered columns={columns} dataSource={tableData} pagination={pagination}/>
     </div>
   )
 }

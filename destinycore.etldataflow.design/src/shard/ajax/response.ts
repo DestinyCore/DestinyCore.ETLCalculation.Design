@@ -8,3 +8,4 @@ export interface IServerReturn<T> {
   export interface IServerPageReturn<T> extends IServerReturn<T> {
     total: number;
   }
+  
