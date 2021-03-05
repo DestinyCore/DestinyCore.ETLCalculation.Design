@@ -18,8 +18,8 @@ import Router from "@/router/index"
 // }
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Router />
-  </React.StrictMode>,
+  // <React.StrictMode>//严格模式是否开启
+    <Router />,
+  // </React.StrictMode>,
   document.getElementById('root')
 );

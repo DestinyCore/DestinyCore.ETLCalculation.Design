@@ -1,63 +1,131 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { PaginationProps, Table, message } from 'antd';
-import React, { useEffect, useState } from 'react'
+import { Button, PaginationProps, Row, Table, message } from "antd";
+import React, { useCallback, useEffect, useState } from "react";
 
-import IDbConnectionService from '@/domain/dbconnection-domain/dbconnection-service/idbconnectionservice';
-import { IocTypes } from '@/shard/inversionofcontrol/ioc-config-types';
-import {initPaginationConfig} from "@/shard/ajax/request"
-import useHookProvider from "@/shard/dependencyInjection/ioc-hook-provider"
+import DbconnectionOperation from "./dbconnection-operation"
+import { Guid } from "guid-typescript";
+import IDbConnectionService from "@/domain/dbconnection-domain/dbconnection-service/idbconnectionservice";
+import { IOperationConfig } from "../../../shard/operation/operationConfig"
+import { IocTypes } from "@/shard/inversionofcontrol/ioc-config-types";
+import { initPaginationConfig } from "@/shard/ajax/request";
+import useHookProvider from "@/shard/dependencyInjection/ioc-hook-provider";
+import { useMemo } from "react";
 
 const Dbconnectionpage = () => {
-  const _dbconnectionservice: IDbConnectionService = useHookProvider(IocTypes.DbConnectionService);
+  const _dbconnectionservice: IDbConnectionService = useHookProvider(
+    IocTypes.DbConnectionService
+  );
+  const [OperationState, setOperationState] = useState<IOperationConfig>({
+    itemId: Guid.EMPTY,
+    title: "",
+    visible: false,
+    onClose(){
+      console.log(123456)
+    }
+  })
   const [tableData, setTableData] = useState([]);
-  const [pagination, setPagination] = useState<PaginationProps>(initPaginationConfig);
+  const [pagination, setPagination] = useState<PaginationProps>(
+    initPaginationConfig
+  );
+  /**
+   * Table 列名
+   */
   const columns = [
-
     {
-      title: '链接名称',
-      dataIndex: 'connectionName',
-      key: "connectionName"
+      title: "链接名称",
+      dataIndex: "connectionName",
+      key: "connectionName",
     },
     {
-      title: '密码',
-      dataIndex: 'passWord',
-      key: "passWord"
+      title: "密码",
+      dataIndex: "passWord",
+      key: "passWord",
     },
     {
-      title: '主机',
-      dataIndex: 'host',
-      key: "host"
+      title: "主机",
+      dataIndex: "host",
+      key: "host",
     },
   ];
+  const renderOperation = useMemo(() => {
+    return (<DbconnectionOperation Config={OperationState}></DbconnectionOperation>)
+  }, [OperationState.itemId, OperationState.visible, OperationState.title])
+  /**
+   * 关闭弹框
+   */
+  const closeOperationModal = useCallback(() => {
+    setOperationState({
+      itemId: Guid.EMPTY,
+      title: "",
+      visible: false,
+      onClose(){
+      }
+    })
+  }, [OperationState])
+  /**
+   * 按钮事件
+   */
+  const onButtonClick = () => {
+    // setOperationState((x:IOperationConfig)=>{
+
+    //   x.visible=true;
+    //   console.log(x)
+    //   return x;
+    // })
+    setOperationState({
+      itemId: Guid.EMPTY,
+      title: "",
+      visible: true,
+      onClose(){
+        
+      }
+    })
+    console.log("1231313123")
+  }
+  /**
+   * 页面初始化事件
+   */
   useEffect(() => {
     getTable();
-  }, [pagination])
+  }, [pagination]);
+  /**
+   * 页面初始化获取数据
+   */
   const getTable = async () => {
     try {
-      _dbconnectionservice.getPage().then(x => {
+      _dbconnectionservice.getPage().then((x) => {
         if (x.success) {
-          setPagination((Pagination)=>{
-            Pagination.total=x.total;
+          setPagination((Pagination) => {
+            Pagination.total = x.total;
             return Pagination;
-          })
+          });
           x.data.map((item: any, index: number) => {
             item.key = item.id;
             return item;
-          })
-          setTableData(x.data)
+          });
+          setTableData(x.data);
         }
       });
-
     } catch (error) {
-      message.error(error)
+      message.error(error);
     }
-  }
+  };
   return (
     <div>
-      <Table bordered columns={columns} dataSource={tableData} pagination={pagination}/>
+      <div>
+        <Row>
+          <Button type="primary" onClick={() => onButtonClick()}>添加</Button>
+        </Row>
+      </div>
+      <Table
+        bordered
+        columns={columns}
+        dataSource={tableData}
+        pagination={pagination}
+      />
+      {renderOperation}
     </div>
-  )
-}
-
-export default Dbconnectionpage
+  );
+};
+export default Dbconnectionpage;
