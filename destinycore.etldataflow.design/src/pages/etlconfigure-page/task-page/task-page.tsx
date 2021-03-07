@@ -1,12 +1,54 @@
-import React from 'react'
+import { Button, Row } from "antd";
+import { useMemo, useState } from "react";
+
+import { Guid } from "guid-typescript";
+import { IOperationConfig } from "../../../shard/operation/operationConfig"
+import TaskOperation from "./task-operation"
 
 const TaskPage = () => {
+    const [OperationState, setOperationState] = useState<IOperationConfig>({
+        itemId: Guid.EMPTY,
+        title: "",
+        visible: false,
+        onClose() {
+            console.log(123456)
+        }
+    })
+    const renderOperation = useMemo(() => {
+        return (<TaskOperation Config={OperationState}></TaskOperation>)
+      }, [OperationState])
 
+    
+    
+
+    
+    /**
+   * 按钮事件
+   */
+    const onButtonClick = () => {
+        setOperationState({
+            itemId: Guid.EMPTY,
+            title: "",
+            visible: true,
+            onClose: colse
+        })
+    }
+    const colse = () => {
+        setOperationState({
+            itemId: Guid.EMPTY,
+            title: "",
+            visible: false,
+            onClose: colse
+        })
+    }
     return (
         <div>
-            任务配置阿萨德啊
+            <Row>
+                <Button type="primary" onClick={() => onButtonClick()}>添加</Button>
+            </Row>
+            {renderOperation}
         </div>
-    )
-}
+    );
+};
 
-export default TaskPage
+export default TaskPage;

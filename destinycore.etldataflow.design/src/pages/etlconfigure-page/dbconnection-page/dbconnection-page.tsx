@@ -50,7 +50,7 @@ const Dbconnectionpage = () => {
   ];
   const renderOperation = useMemo(() => {
     return (<DbconnectionOperation Config={OperationState}></DbconnectionOperation>)
-  }, [OperationState.itemId, OperationState.visible, OperationState.title])
+  }, [OperationState])
   /**
    * 关闭弹框
    */
@@ -118,12 +118,7 @@ const Dbconnectionpage = () => {
           <Button type="primary" onClick={() => onButtonClick()}>添加</Button>
         </Row>
       </div>
-      <Table
-        bordered
-        columns={columns}
-        dataSource={tableData}
-        pagination={pagination}
-      />
+      <Table bordered columns={columns} dataSource={tableData} pagination={pagination}/>
       {renderOperation}
     </div>
   );

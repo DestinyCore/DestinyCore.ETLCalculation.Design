@@ -11,5 +11,5 @@ export interface IOperationConfig {
    * 弹框标题
    */
   title: string;
-   onClose():void;
+  onClose():void;
 }

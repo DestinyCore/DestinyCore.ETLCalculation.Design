@@ -6,7 +6,6 @@ interface IProp{
     Config:IOperationConfig
 }
 const DbconnectionOperation = (props: IProp) => {
-    // const { itemId, title, visible } = props;
     return (
         <div>
             <Modal title={props.Config.title} visible={props.Config.visible} >
@@ -17,5 +16,4 @@ const DbconnectionOperation = (props: IProp) => {
         </div>
     )
 }
-
 export default DbconnectionOperation
