@@ -6,7 +6,7 @@ import {DbconnApi} from "../../apiconfig/index"
 import IDbConnectionService from "./idbconnectionservice"
 
 export default class DbConnectionService extends BaseService implements IDbConnectionService {
-    getselectlistitem(): Promise<IServerReturn<ISelectListItem>> {
+    getselectlistitem(): Promise<IServerReturn<Array<ISelectListItem>>> {
         return this.dataRequest.getRequest(DbconnApi.selectlistitemasync);
     }
     getPage(): Promise<IServerPageReturn<any>> {

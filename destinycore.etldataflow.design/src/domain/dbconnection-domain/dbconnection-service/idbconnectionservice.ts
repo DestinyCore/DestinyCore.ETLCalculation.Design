@@ -15,5 +15,5 @@ export default interface IDbConnectionService {
     /**
      * 获取数据连接下拉框
      */
-    getselectlistitem(): Promise<IServerReturn<ISelectListItem>>;
+    getselectlistitem(): Promise<IServerReturn<Array<ISelectListItem>>>;
 }

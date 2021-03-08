@@ -2,9 +2,13 @@ import "./task-operation.less"
 
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Modal, Row, Steps, message } from "antd";
+import React, { useEffect, useState } from "react";
 
+import IDbConnectionService from "@/domain/dbconnection-domain/dbconnection-service/idbconnectionservice";
 import { IOperationConfig } from "../../../shard/operation/operationConfig"
-import React from "react";
+import { ISelectListItem } from "@/shard/ajax/response";
+import { IocTypes } from "@/shard/inversionofcontrol/ioc-config-types";
+import useHookProvider from "@/shard/dependencyInjection/ioc-hook-provider";
 
 const { Step } = Steps;
 const validateMessages = {
@@ -28,9 +32,14 @@ interface IProp {
     Config: IOperationConfig
 }
 const TaskOperation = (props: IProp) => {
+    const _dbconnectionservice: IDbConnectionService = useHookProvider(IocTypes.DbConnectionService);
+    const [itemlist, setSelectListItem] = useState<Array<ISelectListItem>>([]);
     const onFinish = (values: any) => {
         console.log(values);
     };
+    useEffect(() => {
+        getSelectlist()
+    }, [itemlist])
     const [current, setCurrent] = React.useState(0);
     const steps = [
         {
@@ -43,6 +52,14 @@ const TaskOperation = (props: IProp) => {
             title: '目标设置',
         },
     ];
+    const getSelectlist = async () => {
+        let result = await _dbconnectionservice.getselectlistitem();
+        if (result.success)
+        {
+            // setSelectListItem(result.data);
+            console.log(result.data)
+        }
+    }
     /**
      * 关闭弹框
      */
@@ -97,7 +114,7 @@ const TaskOperation = (props: IProp) => {
                                 name="nest-messages"
                                 onFinish={onFinish}
                                 validateMessages={validateMessages}>
-                                <Form.Item 
+                                <Form.Item
                                     name={["user", "name"]}
                                     label="任务名称"
                                     rules={[{ required: true }]} >
