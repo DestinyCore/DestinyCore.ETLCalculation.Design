@@ -80,7 +80,7 @@ class DynamicAuthRouter extends React.Component<any> {
     MainRouter[0].children = [...MainRouter[0].children, ...menus];
   }
   render() {
-    const { config,location } = this.props;
+    const { config, location } = this.props;
     const { pathname } = window.location;
     const targetRouterConfig = config.find((item: IMenuRoute) => item.path === pathname);
     const token = localStorage.getItem("token");
@@ -131,7 +131,7 @@ class DynamicAuthRouter extends React.Component<any> {
 
       }
     } else {  // 非登录状态
-      
+
       if (pathname.includes("callback")) {
         const { hash } = location;
         const path = `${pathname}${hash}`

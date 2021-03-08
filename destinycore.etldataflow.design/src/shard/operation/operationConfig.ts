@@ -11,5 +11,12 @@ export interface IOperationConfig {
    * 弹框标题
    */
   title: string;
-  onClose():void;
+  /**
+   * 弹框关闭事件
+   */
+  onClose?():void;
+  /**
+   * 成功事件
+   */
+  onConfirm?():void;
 }

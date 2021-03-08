@@ -10,11 +10,15 @@
         "apiconfig",
         "baseservice",
         "containerid",
+        "createasync",
         "dbconnection",
         "dbconnectionservice",
+        "eqeqeq",
         "etlflow",
+        "finesh",
         "getcontainer",
         "getpage",
+        "getselectlistitem",
         "graphservice",
         "iantvx",
         "idbconnectionservice",
@@ -26,6 +30,7 @@
         "resizecontainer",
         "resizeheight",
         "resizewidth",
+        "selectlistitemasync",
         "tabledata"
     ]
 }

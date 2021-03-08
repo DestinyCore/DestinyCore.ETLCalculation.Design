@@ -9,19 +9,16 @@ const TaskPage = () => {
     const [OperationState, setOperationState] = useState<IOperationConfig>({
         itemId: Guid.EMPTY,
         title: "",
-        visible: false,
-        onClose() {
-            console.log(123456)
-        }
+        visible: false
     })
     const renderOperation = useMemo(() => {
         return (<TaskOperation Config={OperationState}></TaskOperation>)
-      }, [OperationState])
+    }, [OperationState])
 
-    
-    
 
-    
+
+
+
     /**
    * 按钮事件
    */
@@ -30,15 +27,13 @@ const TaskPage = () => {
             itemId: Guid.EMPTY,
             title: "",
             visible: true,
-            onClose: colse
-        })
-    }
-    const colse = () => {
-        setOperationState({
-            itemId: Guid.EMPTY,
-            title: "",
-            visible: false,
-            onClose: colse
+            onClose: () => {
+                setOperationState({
+                    itemId: Guid.EMPTY,
+                    title: "",
+                    visible: false,
+                })
+            }
         })
     }
     return (

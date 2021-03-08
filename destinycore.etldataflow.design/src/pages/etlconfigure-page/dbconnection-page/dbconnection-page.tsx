@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { Button, PaginationProps, Row, Table, message } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -20,9 +18,6 @@ const Dbconnectionpage = () => {
     itemId: Guid.EMPTY,
     title: "",
     visible: false,
-    onClose(){
-      console.log(123456)
-    }
   })
   const [tableData, setTableData] = useState([]);
   const [pagination, setPagination] = useState<PaginationProps>(
@@ -52,36 +47,21 @@ const Dbconnectionpage = () => {
     return (<DbconnectionOperation Config={OperationState}></DbconnectionOperation>)
   }, [OperationState])
   /**
-   * 关闭弹框
-   */
-  const closeOperationModal = useCallback(() => {
-    setOperationState({
-      itemId: Guid.EMPTY,
-      title: "",
-      visible: false,
-      onClose(){
-      }
-    })
-  }, [OperationState])
-  /**
    * 按钮事件
    */
   const onButtonClick = () => {
-    // setOperationState((x:IOperationConfig)=>{
-
-    //   x.visible=true;
-    //   console.log(x)
-    //   return x;
-    // })
     setOperationState({
       itemId: Guid.EMPTY,
-      title: "",
+      title: "添加连接",
       visible: true,
-      onClose(){
-        
+      onClose: () => {
+        setOperationState({
+          itemId: Guid.EMPTY,
+          title: "",
+          visible: false,
+        })
       }
     })
-    console.log("1231313123")
   }
   /**
    * 页面初始化事件
@@ -118,7 +98,7 @@ const Dbconnectionpage = () => {
           <Button type="primary" onClick={() => onButtonClick()}>添加</Button>
         </Row>
       </div>
-      <Table bordered columns={columns} dataSource={tableData} pagination={pagination}/>
+      <Table bordered columns={columns} dataSource={tableData} pagination={pagination} />
       {renderOperation}
     </div>
   );
