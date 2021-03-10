@@ -15,6 +15,8 @@ const TaskPage = () => {
         title: "",
         visible: false
     })
+    useEffect(() => {
+    }, [OperationState])
     const _dbconnectionservice: IDbConnectionService = useHookProvider(IocTypes.DbConnectionService);
     const renderOperation = useMemo(() => {
         return (<TaskOperation Config={OperationState}></TaskOperation>)
@@ -23,26 +25,6 @@ const TaskPage = () => {
      * 对象定义
      */
     const [itemlist, setSelectListItem] = useState<Array<ISelectListItem>>([]);
-    /**
-     * 组件初始化加载
-     */
-    useEffect(() => {
-        getSelectlist()
-    }, [itemlist])
-    const getSelectlist = async () => {
-        /**
-         * 获取数据
-         */
-        let result = await _dbconnectionservice.getselectlistitem();
-        if (result.success)
-        {
-            /**
-             * 写入数据
-             */
-            // setSelectListItem(result.data);
-            console.log(result.data)
-        }
-    }
     /**
    * 按钮事件
    */

@@ -1,16 +1,19 @@
 import "./task-operation.less"
 
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Modal, Row, Steps, message } from "antd";
+import { Button, Form, Input, Modal, Row, Select, Steps, message } from "antd";
 import React, { useEffect, useState } from "react";
 
 import IDbConnectionService from "@/domain/dbconnection-domain/dbconnection-service/idbconnectionservice";
 import { IOperationConfig } from "../../../shard/operation/operationConfig"
 import { ISelectListItem } from "@/shard/ajax/response";
 import { IocTypes } from "@/shard/inversionofcontrol/ioc-config-types";
+import { ScheduletTaskInputDto } from "@/domain/scheduletask-domain/scheduletask-entities/scheduleTaskentitie"
+import { TaskTypeEnumList } from "@/domain/scheduletask-domain/scheduletask-entities/tasktype-enum"
 import useHookProvider from "@/shard/dependencyInjection/ioc-hook-provider";
 
 const { Step } = Steps;
+const { Option } = Select;
 const validateMessages = {
     required: "${label} is required!",
     types: {
@@ -31,15 +34,23 @@ const formItemLayout = {
 interface IProp {
     Config: IOperationConfig
 }
+const initbasicformData = new ScheduletTaskInputDto();
+const taskTypeArray = TaskTypeEnumList
 const TaskOperation = (props: IProp) => {
     const _dbconnectionservice: IDbConnectionService = useHookProvider(IocTypes.DbConnectionService);
     const [itemlist, setSelectListItem] = useState<Array<ISelectListItem>>([]);
+    /**
+     * 
+     * @param values 
+     */
     const onFinish = (values: any) => {
-        console.log(values);
+        // console.log(values);
     };
+    const [basicFormData] = Form.useForm();
     useEffect(() => {
+        basicFormData.setFieldsValue(initbasicformData)
         getSelectlist()
-    }, [itemlist])
+    }, [])
     const [current, setCurrent] = React.useState(0);
     const steps = [
         {
@@ -54,10 +65,9 @@ const TaskOperation = (props: IProp) => {
     ];
     const getSelectlist = async () => {
         let result = await _dbconnectionservice.getselectlistitem();
-        if (result.success)
-        {
-            // setSelectListItem(result.data);
-            console.log(result.data)
+        if (result.success) {
+            setSelectListItem(result.data);
+            console.log(itemlist)
         }
     }
     /**
@@ -71,6 +81,7 @@ const TaskOperation = (props: IProp) => {
     };
     const next = () => {
         setCurrent(current + 1);
+        console.log(basicFormData.getFieldsValue());//判断下一步是否清洗数据
     };
     const prev = () => {
         setCurrent(current - 1);
@@ -110,28 +121,34 @@ const TaskOperation = (props: IProp) => {
                 <div className="task-step-content">
                     {
                         current === 0 ?
-                            <Form {...formItemLayout}
+                            <Form form={basicFormData} {...formItemLayout}
                                 name="nest-messages"
                                 onFinish={onFinish}
                                 validateMessages={validateMessages}>
                                 <Form.Item
-                                    name={["user", "name"]}
+                                    name="taskName"
                                     label="任务名称"
                                     rules={[{ required: true }]} >
                                     <Input />
                                 </Form.Item>
                                 <Form.Item
-                                    name={["user", "email"]}
+                                    name="taskNumber"
                                     label="任务编号"
                                     rules={[{ type: "email" }]}>
                                     <Input />
                                 </Form.Item>
                                 <Form.Item
-                                    name={["user", "website"]} label="任务类型">
-                                    <Input />
+                                    name="taskType" label="任务类型">
+                                    <Select>
+                                        {
+                                            taskTypeArray.map((item: any) => {
+                                                return <Option key={item.type} value={item.type}>{item.label}</Option>
+                                            })
+                                        }
+                                    </Select>
                                 </Form.Item>
                                 <Form.Item
-                                    name={["user", "age"]}
+                                    name="describe"
                                     label="任务描述">
                                     <Input />
                                 </Form.Item>
@@ -144,23 +161,30 @@ const TaskOperation = (props: IProp) => {
                                 onFinish={onFinish}
                                 validateMessages={validateMessages}>
                                 <Form.Item
-                                    name={["user", "name"]}
+                                    name="user"
                                     label="来源数据连接"
                                     rules={[{ required: true }]}
                                 >
-                                    <Input />
+                                    <Select>
+                                        {
+                                            itemlist.map(item => {
+                                                return <Option key={item.value} value={item.value}>{item.text}</Option>
+                                            }
+                                            )
+                                        }
+                                    </Select>
                                 </Form.Item>
                                 <Form.Item
-                                    name={["user", "email"]}
-                                    label="任务编号"
+                                    name="user"
+                                    label="源数据库"
                                     rules={[{ type: "email" }]}>
                                     <Input />
                                 </Form.Item>
-                                <Form.Item name={["user", "website"]} label="任务类型">
+                                <Form.Item name="user" label="任务类型">
                                     <Input />
                                 </Form.Item>
                                 <Form.Item
-                                    name={["user", "age"]}
+                                    name="user"
                                     label="任务描述">
                                     <Input />
                                 </Form.Item>

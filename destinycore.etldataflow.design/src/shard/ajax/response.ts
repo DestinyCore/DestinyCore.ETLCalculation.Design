@@ -23,10 +23,10 @@ export interface ISelectListItem{
     /**
      * 显示值
      */
-    text:boolean;
+    text:string;
     /**
      * 唯一值
      */
-    value:boolean;
+    value:string;
   }
   
