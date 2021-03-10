@@ -19,7 +19,34 @@ export enum TaskTypeEnum {
      */
     DataBaseToExcel=15
 }
-
+/**
+ * 目标表写入前操作类型
+ */
+export enum TargerWriteBeforOperationType{
+    /**
+     * 不删除任何数据
+     */
+    DoNotDeleteAnyData=0,
+    /**
+     * 删除已有数据
+     */
+    DeleteExistingData=5,
+    /**
+     * 删除本批数据
+     */
+    DeleteThisBatchData=10,
+    /**
+     * 清空目标表数据
+     */
+    ClearTargetTableData=15,
+    /**
+     * 自定义删除语句
+     */
+    CustomDeleteStatement=20,
+}
+/**
+ * 任务类型数组
+ */
 export const TaskTypeEnumList: Array<any> = [
     {
         type: TaskTypeEnum.DataBaseToDataBase,

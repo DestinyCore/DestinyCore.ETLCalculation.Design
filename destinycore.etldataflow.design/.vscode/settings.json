@@ -2,6 +2,7 @@
     "cSpell.words": [
         "Aantvx",
         "Antvx",
+        "Befor",
         "Dbconn",
         "Dbconnectionpage",
         "Selectlist",
@@ -36,6 +37,7 @@
         "resizeheight",
         "resizewidth",
         "selectlistitemasync",
-        "tabledata"
+        "tabledata",
+        "targer"
     ]
 }

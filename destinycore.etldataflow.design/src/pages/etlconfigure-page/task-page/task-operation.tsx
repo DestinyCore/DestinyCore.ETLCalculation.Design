@@ -47,6 +47,7 @@ const TaskOperation = (props: IProp) => {
         // console.log(values);
     };
     const [basicFormData] = Form.useForm();
+    const [sourceFormData] = Form.useForm();
     useEffect(() => {
         basicFormData.setFieldsValue(initbasicformData)
         getSelectlist()
@@ -57,10 +58,10 @@ const TaskOperation = (props: IProp) => {
             title: '基础信息',
         },
         {
-            title: '来源设置',
+            title: '数据来源设置',
         },
         {
-            title: '目标设置',
+            title: '数据目标设置',
         },
     ];
     const getSelectlist = async () => {
@@ -88,7 +89,7 @@ const TaskOperation = (props: IProp) => {
     };
     return (
         <div>
-            <Modal width={1000} title={props.Config.title} closable={false} visible={props.Config.visible}
+            <Modal getContainer={false} width={1000} title={props.Config.title} closable={false} visible={props.Config.visible}
                 footer={[
                     <div key="foot" className="steps-action">
                         <Button key="cancel" style={{ margin: '0 8px' }} onClick={() => onCancel()}>
@@ -156,7 +157,7 @@ const TaskOperation = (props: IProp) => {
                     }
                     {
                         current === 1 ?
-                            <Form {...formItemLayout}
+                            <Form {...formItemLayout} form={sourceFormData} 
                                 name="nest-messages"
                                 onFinish={onFinish}
                                 validateMessages={validateMessages}>
