@@ -23,6 +23,7 @@
     "no-unused-expression": false,
     "max-classes-per-file": false,
     "no-template-curly-in-string": "off",
+    "react-hooks/exhaustive-deps": "off",
     "eqeqeq": [
       "off"
     ]
