@@ -3,13 +3,13 @@ import "./task-operation.less"
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Modal, Row, Select, Steps, message } from "antd";
 import React, { useEffect, useState } from "react";
+import { TaskTypeEnum, TaskTypeEnumList } from "@/domain/scheduletask-domain/scheduletask-entities/tasktype-enum"
 
 import IDbConnectionService from "@/domain/dbconnection-domain/dbconnection-service/idbconnectionservice";
 import { IOperationConfig } from "../../../shard/operation/operationConfig"
 import { ISelectListItem } from "@/shard/ajax/response";
 import { IocTypes } from "@/shard/inversionofcontrol/ioc-config-types";
 import { ScheduletTaskInputDto } from "@/domain/scheduletask-domain/scheduletask-entities/scheduleTaskentitie"
-import { TaskTypeEnumList } from "@/domain/scheduletask-domain/scheduletask-entities/tasktype-enum"
 import useHookProvider from "@/shard/dependencyInjection/ioc-hook-provider";
 
 const { Step } = Steps;
@@ -39,6 +39,7 @@ const taskTypeArray = TaskTypeEnumList
 const TaskOperation = (props: IProp) => {
     const _dbconnectionservice: IDbConnectionService = useHookProvider(IocTypes.DbConnectionService);
     const [itemlist, setSelectListItem] = useState<Array<ISelectListItem>>([]);
+    const [taskType, setTaskType] = useState<TaskTypeEnum>(TaskTypeEnum.DataBaseToDataBase)
     /**
      * 
      * @param values 
@@ -70,6 +71,9 @@ const TaskOperation = (props: IProp) => {
             setSelectListItem(result.data);
             console.log(itemlist)
         }
+    }
+    const handleChange=(value:TaskTypeEnum)=>{
+        setTaskType(value)
     }
     /**
      * 关闭弹框
@@ -140,7 +144,7 @@ const TaskOperation = (props: IProp) => {
                                 </Form.Item>
                                 <Form.Item
                                     name="taskType" label="任务类型">
-                                    <Select>
+                                    <Select onChange={handleChange}>
                                         {
                                             taskTypeArray.map((item: any) => {
                                                 return <Option key={item.type} value={item.type}>{item.label}</Option>
@@ -157,39 +161,67 @@ const TaskOperation = (props: IProp) => {
                     }
                     {
                         current === 1 ?
-                            <Form {...formItemLayout} form={sourceFormData} 
-                                name="nest-messages"
-                                onFinish={onFinish}
-                                validateMessages={validateMessages}>
-                                <Form.Item
-                                    name="user"
-                                    label="来源数据连接"
-                                    rules={[{ required: true }]}
-                                >
-                                    <Select>
-                                        {
-                                            itemlist.map(item => {
-                                                return <Option key={item.value} value={item.value}>{item.text}</Option>
-                                            }
-                                            )
-                                        }
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item
-                                    name="user"
-                                    label="源数据库"
-                                    rules={[{ type: "email" }]}>
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item name="user" label="任务类型">
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item
-                                    name="user"
-                                    label="任务描述">
-                                    <Input />
-                                </Form.Item>
-                            </Form> : null
+                            <div>
+                                {
+                                    taskType === TaskTypeEnum.DataBaseToDataBase ?
+                                        <Form  {...formItemLayout} form={sourceFormData}
+                                            name="nest-messages"
+                                            onFinish={onFinish}
+                                            validateMessages={validateMessages}>
+                                            <Form.Item
+                                                name="user"
+                                                label="来源数据连接"
+                                                rules={[{ required: true }]}
+                                            >
+                                                <Select>
+                                                    {
+                                                        itemlist.map(item => {
+                                                            return <Option key={item.value} value={item.value}>{item.text}</Option>
+                                                        }
+                                                        )
+                                                    }
+                                                </Select>
+                                            </Form.Item>
+                                            <Form.Item
+                                                name="user"
+                                                label="源数据库"
+                                                rules={[{ type: "email" }]}>
+                                                <Input />
+                                            </Form.Item>
+                                            <Form.Item name="user" label="任务类型">
+                                                <Input />
+                                            </Form.Item>
+                                            <Form.Item
+                                                name="user"
+                                                label="任务描述">
+                                                <Input />
+                                            </Form.Item>
+                                        </Form> : null
+                                }
+                                {
+                                    taskType === TaskTypeEnum.Http ?
+                                        <Form  {...formItemLayout} form={sourceFormData}
+                                            name="nest-messages"
+                                            onFinish={onFinish}
+                                            validateMessages={validateMessages}>
+                                            <Form.Item
+                                                name="user"
+                                                label="HTTP"
+                                                rules={[{ required: true }]}
+                                            >
+                                                <Select>
+                                                    {
+                                                        itemlist.map(item => {
+                                                            return <Option key={item.value} value={item.value}>{item.text}</Option>
+                                                        }
+                                                        )
+                                                    }
+                                                </Select>
+                                            </Form.Item>
+                                        </Form> : null
+                                }
+
+                            </div> : null
                     }
                 </div>
             </Modal>
