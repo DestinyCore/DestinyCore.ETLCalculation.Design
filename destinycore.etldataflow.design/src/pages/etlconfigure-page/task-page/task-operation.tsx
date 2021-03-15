@@ -72,7 +72,7 @@ const TaskOperation = (props: IProp) => {
             console.log(itemlist)
         }
     }
-    const handleChange=(value:TaskTypeEnum)=>{
+    const handleChange = (value: TaskTypeEnum) => {
         setTaskType(value)
     }
     /**
@@ -160,69 +160,70 @@ const TaskOperation = (props: IProp) => {
                             </Form> : null
                     }
                     {
-                        current === 1 ?
-                            <div>
-                                {
-                                    taskType === TaskTypeEnum.DataBaseToDataBase ?
-                                        <Form  {...formItemLayout} form={sourceFormData}
-                                            name="nest-messages"
-                                            onFinish={onFinish}
-                                            validateMessages={validateMessages}>
-                                            <Form.Item
-                                                name="user"
-                                                label="来源数据连接"
-                                                rules={[{ required: true }]}
-                                            >
-                                                <Select>
-                                                    {
-                                                        itemlist.map(item => {
-                                                            return <Option key={item.value} value={item.value}>{item.text}</Option>
-                                                        }
-                                                        )
-                                                    }
-                                                </Select>
-                                            </Form.Item>
-                                            <Form.Item
-                                                name="user"
-                                                label="源数据库"
-                                                rules={[{ type: "email" }]}>
-                                                <Input />
-                                            </Form.Item>
-                                            <Form.Item name="user" label="任务类型">
-                                                <Input />
-                                            </Form.Item>
-                                            <Form.Item
-                                                name="user"
-                                                label="任务描述">
-                                                <Input />
-                                            </Form.Item>
-                                        </Form> : null
-                                }
-                                {
-                                    taskType === TaskTypeEnum.Http ?
-                                        <Form  {...formItemLayout} form={sourceFormData}
-                                            name="nest-messages"
-                                            onFinish={onFinish}
-                                            validateMessages={validateMessages}>
-                                            <Form.Item
-                                                name="user"
-                                                label="HTTP"
-                                                rules={[{ required: true }]}
-                                            >
-                                                <Select>
-                                                    {
-                                                        itemlist.map(item => {
-                                                            return <Option key={item.value} value={item.value}>{item.text}</Option>
-                                                        }
-                                                        )
-                                                    }
-                                                </Select>
-                                            </Form.Item>
-                                        </Form> : null
-                                }
-
-                            </div> : null
+                        current === 1 && taskType === TaskTypeEnum.DataBaseToDataBase ?
+                            <Form  {...formItemLayout} form={sourceFormData}
+                                name="nest-messages"
+                                onFinish={onFinish}
+                                validateMessages={validateMessages}>
+                                <Form.Item
+                                    name="targerId"
+                                    label="来源数据连接"
+                                    rules={[{ required: true }]}
+                                >
+                                    <Select>
+                                        {
+                                            itemlist.map(item => {
+                                                return <Option key={item.value} value={item.value}>{item.text}</Option>
+                                            }
+                                            )
+                                        }
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item
+                                    name="sourceTable"
+                                    label="源表">
+                                    <Input />
+                                </Form.Item>
+                                <Form.Item
+                                    name="sqlQuery"
+                                    label="查询语句">
+                                    <Input.TextArea rows={4} />
+                                </Form.Item>
+                            </Form> : null
                     }
+                    {
+                        current === 2 && taskType === TaskTypeEnum.DataBaseToDataBase ?
+                            <Form  {...formItemLayout} form={sourceFormData}
+                                name="nest-messages"
+                                onFinish={onFinish}
+                                validateMessages={validateMessages}>
+                                <Form.Item
+                                    name="targerId"
+                                    label="目标数据连接"
+                                    rules={[{ required: true }]}
+                                >
+                                    <Select>
+                                        {
+                                            itemlist.map(item => {
+                                                return <Option key={item.value} value={item.value}>{item.text}</Option>
+                                            }
+                                            )
+                                        }
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item
+                                    name="sourceTable"
+                                    label="源表">
+                                    <Input />
+                                </Form.Item>
+                                <Form.Item
+                                    name="sqlQuery"
+                                    label="查询语句">
+                                    <Input.TextArea rows={4} />
+                                </Form.Item>
+                            </Form> : null
+                    }
+
                 </div>
             </Modal>
         </div >
