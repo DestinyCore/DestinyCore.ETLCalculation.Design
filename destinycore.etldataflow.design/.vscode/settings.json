@@ -2,9 +2,11 @@
     "cSpell.words": [
         "Aantvx",
         "Antvx",
+        "Bconnection",
         "Befor",
         "Dbconn",
         "Dbconnectionpage",
+        "Resourceentities",
         "Schedulet",
         "Selectlist",
         "Sraph",
@@ -17,10 +19,13 @@
         "createasync",
         "dbconnection",
         "dbconnectionservice",
+        "entitie",
         "eqeqeq",
         "etlflow",
         "finesh",
         "getcontainer",
+        "getmetadata",
+        "getmetadataasync",
         "getpage",
         "getselectlistitem",
         "graphservice",
@@ -40,6 +45,7 @@
         "resizewidth",
         "selectlistitemasync",
         "tabledata",
-        "targer"
+        "targer",
+        "treedto"
     ]
 }

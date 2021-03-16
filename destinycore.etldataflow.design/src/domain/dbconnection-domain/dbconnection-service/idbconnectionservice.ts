@@ -1,6 +1,7 @@
 import { ISelectListItem, IServerPageReturn, IServerReturn } from "../../../shard/ajax/response";
 
 import { DBConnResourceInputDto } from "../dbconnection-entitie/dbconnResourceentities"
+import { TreeDto } from "../../../shard/entity/treedto";
 
 export default interface IDbConnectionService {
     /**
@@ -16,4 +17,8 @@ export default interface IDbConnectionService {
      * 获取数据连接下拉框
      */
     getselectlistitem(): Promise<IServerReturn<Array<ISelectListItem>>>;
+    /**
+     * 获取元数据
+     */
+     getmetadata(): Promise<IServerReturn<Array<TreeDto>>>;
 }

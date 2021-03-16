@@ -223,7 +223,6 @@ const TaskOperation = (props: IProp) => {
                                 </Form.Item>
                             </Form> : null
                     }
-
                 </div>
             </Modal>
         </div >
