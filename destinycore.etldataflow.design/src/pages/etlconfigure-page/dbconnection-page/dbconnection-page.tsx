@@ -1,11 +1,13 @@
-import { Button, PaginationProps, Row, Table, message } from "antd";
+import { Button, PaginationProps, Row, Spin, Table, message } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 
+import DBconnectionMetadata from "./dbconnection-metadata"
 import DbconnectionOperation from "./dbconnection-operation"
 import { Guid } from "guid-typescript";
 import IDbConnectionService from "@/domain/dbconnection-domain/dbconnection-service/idbconnectionservice";
 import { IOperationConfig } from "../../../shard/operation/operationConfig"
 import { IocTypes } from "@/shard/inversionofcontrol/ioc-config-types";
+import { TreeDto } from "../../../shard/entity/treedto"
 import { initPaginationConfig } from "@/shard/ajax/request";
 import useHookProvider from "@/shard/dependencyInjection/ioc-hook-provider";
 import { useMemo } from "react";
@@ -14,7 +16,14 @@ const Dbconnectionpage = () => {
   const _dbconnectionservice: IDbConnectionService = useHookProvider(
     IocTypes.DbConnectionService
   );
+  const [loading,setloading]=useState<boolean>(true);
   const [OperationState, setOperationState] = useState<IOperationConfig>({
+    itemId: Guid.EMPTY,
+    title: "",
+    visible: false,
+  })
+  const [metadataArrayTree, setMetadataArrayTree]=useState<Array<TreeDto>>([]);
+  const [importMetadataState, setImportMetadataState] = useState<IOperationConfig>({
     itemId: Guid.EMPTY,
     title: "",
     visible: false,
@@ -42,10 +51,33 @@ const Dbconnectionpage = () => {
       dataIndex: "host",
       key: "host",
     },
+    {
+      title: "操作",
+      dataIndex: "id",
+      key: "id",
+      render: (text: any, record: any) => {
+        return <div>
+          <Button
+            type="primary"
+            onClick={() => { importMetadataClick(record) }}>
+            导入
+          </Button>
+        </div>
+      }
+    }
   ];
+  /**
+   * 添加/修改组件
+   */
   const renderOperation = useMemo(() => {
     return (<DbconnectionOperation Config={OperationState}></DbconnectionOperation>)
   }, [OperationState])
+  /**
+   * 导入元数据组件
+   */
+   const importMetadata = useMemo(() => {
+    return (<DBconnectionMetadata Config={importMetadataState} TreeArr={metadataArrayTree} ></DBconnectionMetadata>)
+  }, [importMetadataState])
   /**
    * 按钮事件
    */
@@ -59,6 +91,30 @@ const Dbconnectionpage = () => {
           itemId: Guid.EMPTY,
           title: "",
           visible: false,
+        })
+      }
+    })
+  }
+  /**
+   * 导入元数据
+   * @param _row 
+   */
+  const importMetadataClick = (_row: any) => {
+    _dbconnectionservice.getmetadata().then(result=>{
+      if(result.success)
+      {
+        setMetadataArrayTree(result.data)
+        setImportMetadataState({
+          itemId: Guid.EMPTY,
+          title: "导入元数据",
+          visible: true,
+          onClose:()=>{
+            setImportMetadataState({
+              itemId: Guid.EMPTY,
+              title: "",
+              visible: false,
+            })
+          }
         })
       }
     })
@@ -85,6 +141,7 @@ const Dbconnectionpage = () => {
             return item;
           });
           setTableData(x.data);
+          setloading(false);
         }
       });
     } catch (error) {
@@ -98,8 +155,9 @@ const Dbconnectionpage = () => {
           <Button type="primary" onClick={() => onButtonClick()}>添加</Button>
         </Row>
       </div>
-      <Table bordered columns={columns} dataSource={tableData} pagination={pagination} />
+      <Table bordered columns={columns} dataSource={tableData} loading={loading} pagination={pagination} />
       {renderOperation}
+      {importMetadata}
     </div>
   );
 };
