@@ -3,4 +3,5 @@ export const DbconnApi = {
     createasync: "/etl/DBConnection/CreateAsync",
     selectlistitemasync: "/etl/DBConnection/GetLoadSelectListItemAsync",
     getmetadataasync: "/etl/DBConnection/GetLoadMetaDataAsync",
+    importmetadataasync: "/etl/DBConnection/ImportMetaDataAsync",
   }

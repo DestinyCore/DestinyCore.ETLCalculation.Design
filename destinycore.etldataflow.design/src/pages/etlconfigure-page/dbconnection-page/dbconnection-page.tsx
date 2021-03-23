@@ -16,13 +16,14 @@ const Dbconnectionpage = () => {
   const _dbconnectionservice: IDbConnectionService = useHookProvider(
     IocTypes.DbConnectionService
   );
-  const [loading,setloading]=useState<boolean>(true);
+  const [loading, setloading] = useState<boolean>(true);
   const [OperationState, setOperationState] = useState<IOperationConfig>({
     itemId: Guid.EMPTY,
     title: "",
     visible: false,
   })
-  const [metadataArrayTree, setMetadataArrayTree]=useState<Array<TreeDto>>([]);
+  const [currentId, setCurrentIdState] = useState<string>("")
+  const [metadataArrayTree, setMetadataArrayTree] = useState<Array<TreeDto>>([]);
   const [importMetadataState, setImportMetadataState] = useState<IOperationConfig>({
     itemId: Guid.EMPTY,
     title: "",
@@ -75,8 +76,8 @@ const Dbconnectionpage = () => {
   /**
    * 导入元数据组件
    */
-   const importMetadata = useMemo(() => {
-    return (<DBconnectionMetadata Config={importMetadataState} TreeArr={metadataArrayTree} ></DBconnectionMetadata>)
+  const importMetadata = useMemo(() => {
+    return (<DBconnectionMetadata Config={importMetadataState} connId={currentId} TreeArr={metadataArrayTree} ></DBconnectionMetadata>)
   }, [importMetadataState])
   /**
    * 按钮事件
@@ -100,15 +101,15 @@ const Dbconnectionpage = () => {
    * @param _row 
    */
   const importMetadataClick = (_row: any) => {
-    _dbconnectionservice.getmetadata().then(result=>{
-      if(result.success)
-      {
+    setCurrentIdState(_row.id)
+    _dbconnectionservice.getmetadata().then(result => {
+      if (result.success) {
         setMetadataArrayTree(result.data)
         setImportMetadataState({
           itemId: Guid.EMPTY,
           title: "导入元数据",
           visible: true,
-          onClose:()=>{
+          onClose: () => {
             setImportMetadataState({
               itemId: Guid.EMPTY,
               title: "",

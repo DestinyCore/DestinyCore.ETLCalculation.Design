@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Modal, message } from "antd"
+import { Button, Form, Input, InputNumber, Modal, message } from "antd"
 import React, { useEffect } from 'react'
 
 import { DBConnResourceInputDto } from "@/domain/dbconnection-domain/dbconnection-entitie/dbconnResourceentities"
@@ -57,7 +57,16 @@ const DbconnectionOperation = (props: IProp) => {
     }
     return (
         <div>
-            <Modal width={1000} title={props.Config.title} visible={props.Config.visible} onCancel={onCancel} onOk={onOk}  >
+            <Modal width={1000} title={props.Config.title} visible={props.Config.visible} onCancel={onCancel} onOk={onOk} 
+             footer={[
+                <Button key="back" onClick={onCancel}>
+                  取消
+                </Button>,
+                <Button key="submit" type="primary"  onClick={onOk}>
+                  保存
+                </Button>
+              ]}
+              >
                 <Form form={formData}
                     {...formItemLayout}
                     name="nest-messages"
