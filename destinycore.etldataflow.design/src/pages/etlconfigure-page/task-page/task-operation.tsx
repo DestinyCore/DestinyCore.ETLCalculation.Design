@@ -1,5 +1,5 @@
 import "./task-operation.less"
-
+import CodeMirror from 'react-codemirror';  
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Modal, Row, Select, Steps, message } from "antd";
 import React, { useEffect, useState } from "react";
@@ -11,7 +11,12 @@ import { ISelectListItem } from "@/shard/ajax/response";
 import { IocTypes } from "@/shard/inversionofcontrol/ioc-config-types";
 import { ScheduletTaskInputDto } from "@/domain/scheduletask-domain/scheduletask-entities/scheduleTaskentitie"
 import useHookProvider from "@/shard/dependencyInjection/ioc-hook-provider";
-
+import 'codemirror/lib/codemirror.css';  
+import 'codemirror/mode/sql/sql';  
+import 'codemirror/addon/hint/show-hint.css';  
+import 'codemirror/addon/hint/show-hint.js';  
+import 'codemirror/addon/hint/sql-hint.js';  
+import 'codemirror/theme/ambiance.css';  
 const { Step } = Steps;
 const { Option } = Select;
 const validateMessages = {
@@ -36,10 +41,17 @@ interface IProp {
 }
 const initbasicformData = new ScheduletTaskInputDto();
 const taskTypeArray = TaskTypeEnumList
+const codeMirrorOptions={
+    lineNumbers: true,                     //显示行号  
+    mode: {name: "text/x-mysql"},          //定义mode  
+    extraKeys: {"Ctrl": "autocomplete"},   //自动提示配置  
+    theme: "ambiance"                  //选中的theme  
+}
 const TaskOperation = (props: IProp) => {
     const _dbconnectionservice: IDbConnectionService = useHookProvider(IocTypes.DbConnectionService);
     const [itemlist, setSelectListItem] = useState<Array<ISelectListItem>>([]);
     const [taskType, setTaskType] = useState<TaskTypeEnum>(TaskTypeEnum.DataBaseToDataBase)
+    
     /**
      * 
      * @param values 
@@ -51,7 +63,7 @@ const TaskOperation = (props: IProp) => {
     const [sourceFormData] = Form.useForm();
     useEffect(() => {
         basicFormData.setFieldsValue(initbasicformData)
-        getSelectlist()
+        getSelectlist();
     }, [])
     const [current, setCurrent] = React.useState(0);
     const steps = [
@@ -91,9 +103,12 @@ const TaskOperation = (props: IProp) => {
     const prev = () => {
         setCurrent(current - 1);
     };
+
+
+    
     return (
         <div>
-            <Modal getContainer={false} width={1000} title={props.Config.title} closable={false} visible={props.Config.visible}
+            <Modal getContainer={false} width={1000} title={props.Config.title}  closable={false} visible={props.Config.visible}
                 footer={[
                     <div key="foot" className="steps-action">
                         <Button key="cancel" style={{ margin: '0 8px' }} onClick={() => onCancel()}>
@@ -187,7 +202,7 @@ const TaskOperation = (props: IProp) => {
                                 <Form.Item
                                     name="sqlQuery"
                                     label="查询语句">
-                                    <Input.TextArea rows={4} />
+                                    <CodeMirror options={codeMirrorOptions}></CodeMirror>
                                 </Form.Item>
                             </Form> : null
                     }
@@ -216,10 +231,11 @@ const TaskOperation = (props: IProp) => {
                                     label="源表">
                                     <Input />
                                 </Form.Item>
+                                
                                 <Form.Item
                                     name="sqlQuery"
                                     label="查询语句">
-                                    <Input.TextArea rows={4} />
+                                        <CodeMirror options={codeMirrorOptions}></CodeMirror>
                                 </Form.Item>
                             </Form> : null
                     }
