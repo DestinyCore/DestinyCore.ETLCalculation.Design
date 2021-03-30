@@ -1,3 +1,5 @@
+import { MetaDataTypeEnum } from "@/domain/dbconnection-domain/dbconnection-entitie/dbconnResourceentities";
+
 /**
  * 主键
  */
@@ -18,6 +20,10 @@ export class TreeDto {
     * 是否可选
     */
     disabled: boolean = false;
+    /**
+     * 类型
+     */
+    metaDataType:MetaDataTypeEnum=MetaDataTypeEnum.metaDataTable;
     /**
     * 是否可选
     */

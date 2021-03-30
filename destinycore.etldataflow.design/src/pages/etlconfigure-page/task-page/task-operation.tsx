@@ -81,7 +81,6 @@ const TaskOperation = (props: IProp) => {
         let result = await _dbconnectionservice.getselectlistitem();
         if (result.success) {
             setSelectListItem(result.data);
-            console.log(itemlist)
         }
     }
     const handleChange = (value: TaskTypeEnum) => {
