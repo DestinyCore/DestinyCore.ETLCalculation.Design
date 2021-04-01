@@ -17,7 +17,11 @@ export enum TaskTypeEnum {
     /**
      * 数据库导出Excel任务
      */
-    DataBaseToExcel=15
+    DataBaseToExcel=15,
+    /**
+     * Json文件导入到数据库
+     */
+    JsonToDatabase=20
 }
 /**
  * 目标表写入前操作类型
@@ -63,5 +67,27 @@ export const TaskTypeEnumList: Array<any> = [
     {
         type: TaskTypeEnum.DataBaseToExcel,
         label: "数据库导出Excel任务",
+    },
+    {
+        type: TaskTypeEnum.JsonToDatabase,
+        label: "Json文件导入到数据库",
+    }
+]
+/**
+ * Json文件来源类型
+ */
+ export enum JsonInputType{
+    /**
+     * FTP下载文件解析
+     */
+    FtpDownLoad=0,
+}
+/**
+ * 任务类型数组
+ */
+ export const JsonInputTypeEnumList: Array<any> = [
+    {
+        type: JsonInputType.FtpDownLoad,
+        label: "FTP下载文件解析",
     }
 ]
