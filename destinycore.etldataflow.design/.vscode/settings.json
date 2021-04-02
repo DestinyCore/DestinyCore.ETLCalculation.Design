@@ -26,6 +26,7 @@
         "eqeqeq",
         "etlflow",
         "finesh",
+        "ftpjson",
         "getcontainer",
         "getmetadata",
         "getmetadataasync",
@@ -53,6 +54,7 @@
         "setloading",
         "tabledata",
         "targer",
+        "targetfile",
         "treedto"
     ]
 }

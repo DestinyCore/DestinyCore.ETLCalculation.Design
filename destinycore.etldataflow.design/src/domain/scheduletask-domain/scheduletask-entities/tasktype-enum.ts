@@ -5,24 +5,30 @@ export enum TaskTypeEnum {
     /**
      * 数据库导入数据库任务
      */
-    DataBaseToDataBase = 0,
+    input = 0,
     /**
      * Http任务
      */
-    Http = 5,
+    outPut = 5,
+}
+/**
+ * 任务类型
+ */
+ export enum TaskInputTypeEnum {
     /**
-     * Excel导入数据库任务
+     * 数据库导入数据库任务
      */
-    ExcelToDataBase = 10,
-    /**
-     * 数据库导出Excel任务
-     */
-    DataBaseToExcel=15,
+    dataBase = 0,
     /**
      * Json文件导入到数据库
      */
-    JsonToDatabase=20
+    ftpjson=5,
+    /**
+     * Excel输入
+     */
+    excel=10,
 }
+
 /**
  * 目标表写入前操作类型
  */
@@ -48,46 +54,14 @@ export enum TargerWriteBeforOperationType{
      */
     CustomDeleteStatement=20,
 }
-/**
- * 任务类型数组
- */
-export const TaskTypeEnumList: Array<any> = [
-    {
-        type: TaskTypeEnum.DataBaseToDataBase,
-        label: "数据库导入数据库任务",
-    },
-    {
-        type: TaskTypeEnum.Http,
-        label: "Http任务",
-    },
-    {
-        type: TaskTypeEnum.ExcelToDataBase,
-        label: "Excel导入数据库任务",
-    },
-    {
-        type: TaskTypeEnum.DataBaseToExcel,
-        label: "数据库导出Excel任务",
-    },
-    {
-        type: TaskTypeEnum.JsonToDatabase,
-        label: "Json文件导入到数据库",
-    }
-]
+
 /**
  * Json文件来源类型
  */
- export enum JsonInputType{
+ export enum InputType{
     /**
      * FTP下载文件解析
      */
     FtpDownLoad=0,
 }
-/**
- * 任务类型数组
- */
- export const JsonInputTypeEnumList: Array<any> = [
-    {
-        type: JsonInputType.FtpDownLoad,
-        label: "FTP下载文件解析",
-    }
-]
+

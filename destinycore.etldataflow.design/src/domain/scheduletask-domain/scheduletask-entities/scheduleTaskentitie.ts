@@ -9,7 +9,7 @@ export class ScheduletTaskBase implements IEntity<string> {
     id: string = "";
     taskNumber: string = "";
     taskName: string = "";
-    taskType: TaskTypeEnum = TaskTypeEnum.DataBaseToDataBase;
+    taskType: TaskTypeEnum = TaskTypeEnum.input;
     taskConfig: string = "";
     describe: string = "";
 }
