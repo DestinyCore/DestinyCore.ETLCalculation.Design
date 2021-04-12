@@ -18,21 +18,22 @@ import "codemirror/addon/hint/anyword-hint.js";
 
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Modal, Row, Select, Steps, message } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
-
+import React, { useEffect, useMemo, useState, useRef } from "react";
+import { ftpConfigDto, ReadJsonConfig, JsonReadConfigInputDto } from "@/domain/scheduletask-domain/scheduletask-entities/input-entities/json-input"
 import CodeMirror from 'react-codemirror';
 import IDbConnectionService from "@/domain/dbconnection-domain/dbconnection-service/idbconnectionservice";
 import { IOperationConfig } from "../../../shard/operation/operationConfig"
 import { ISelectListItem } from "@/shard/ajax/response";
 import { IocTypes } from "@/shard/inversionofcontrol/ioc-config-types";
 import JsonForm from "./input-form/json-form"
+import TaskGeneralConfig from "./task-general-config"
 import { ScheduletTaskInputDto } from "@/domain/scheduletask-domain/scheduletask-entities/scheduleTaskentitie"
 import { TaskTypeEnum } from "@/domain/scheduletask-domain/scheduletask-entities/tasktype-enum"
 import { TaskTypeEnumList } from "@/domain/scheduletask-domain/scheduletask-entities/tasktypeConstans"
 import useHookProvider from "@/shard/dependencyInjection/ioc-hook-provider";
-
+import IScheduleTaskService from "@/domain/scheduletask-domain/scheduletask-services/ischeduletask-service";
+import { Guid } from "guid-typescript";
 // import 'codemirror/theme/ambiance.css';  
-
 // options = {
 //         value: "",
 //         mode: "python",
@@ -70,30 +71,10 @@ import useHookProvider from "@/shard/dependencyInjection/ioc-hook-provider";
 //         lastLineBefore: 0
 //       };
 
-const { Step } = Steps;
-const { Option } = Select;
-const validateMessages = {
-    required: "${label} is required!",
-    types: {
-        email: "${label} is not a valid email!",
-        number: "${label} is not a valid number!",
-    },
-    number: {
-        range: "${label} must be between ${min} and ${max}",
-    },
-};
-/**
- * form表单布局设置
- */
-const formItemLayout = {
-    labelCol: { span: 3 },
-    wrapperCol: { span: 20 },
-};
 interface IProp {
-    Config: IOperationConfig
+    Config: IOperationConfig;
+    taskType: TaskTypeEnum;
 }
-const initbasicformData = new ScheduletTaskInputDto();
-const taskTypeArray = TaskTypeEnumList
 const codeMirrorOptions = {
     lineNumbers: true,                     //显示行号  
     mode: { name: "text/x-csharp" },          //定义mode  
@@ -106,32 +87,87 @@ const codeMirrorOptions = {
         "CodeMirror-lint-markers"
     ],               //选中的theme  
 }
+const { Step } = Steps;
 const TaskOperation = (props: IProp) => {
-    const _dbconnectionservice: IDbConnectionService = useHookProvider(IocTypes.DbConnectionService);
-    const [itemlist, setSelectListItem] = useState<Array<ISelectListItem>>([]);
-    const [taskType, setTaskType] = useState<TaskTypeEnum>(TaskTypeEnum.input)
     /**
      * 
-     * @param values 
      */
-    const onFinish = (values: any) => {
-        // console.log(values);
+    const _dbconnectionservice: IDbConnectionService = useHookProvider(IocTypes.DbConnectionService);
+    const _scheduletaskservice: IScheduleTaskService=useHookProvider(IocTypes.ScheduleTaskService);
+    /**
+     * 任务基础配置
+     */
+    const [taskbasicState, settaskbasicState] = useState<ScheduletTaskInputDto>(new ScheduletTaskInputDto())
+    /**
+     * Json文件读取配置
+     */
+    const [ReadJsonConfigState, setReadJsonConfigState] = useState<ReadJsonConfig>(new ReadJsonConfig());
+    const [itemlist, setSelectListItem] = useState<Array<ISelectListItem>>([]);
+    /**
+     * 步骤条
+     */
+    const [current, setCurrent] = React.useState(0);
+    /**
+     * 步骤条数组
+     */
+    const steps = [
+        {
+            title: '基础信息',
+        },
+        {
+            title: '数据来源设置',
+        }
+    ];
+    /**
+     * 读取Json文件的Ref
+     */
+    const jsoninputRef = React.createRef<any>();
+    /**
+     * 任务基础配置Ref
+     */
+    const taskbasicinputRef = React.createRef<any>();
+    /**
+     * 点击下一步
+     */
+    const next = () => {
+        taskbasicinputRef.current.getSonformValues();
+        setCurrent(current + 1);
     };
-    const [basicFormData] = Form.useForm();
-    const [dbinputFormData] = Form.useForm();
-    const [jsoninputFormData] = Form.useForm();
     useEffect(() => {
-        basicFormData.setFieldsValue(initbasicformData)
-        getSelectlist();
-    }, []);
-    const jsonForm = useMemo(() => {
-        return (<JsonForm></JsonForm>)
-    }, [])
+    }, [ReadJsonConfigState, taskbasicState]);
+    /**
+     * 点击上一步
+     */
+    const prev = () => {
+        setCurrent(current - 1);
+    };
     const getSelectlist = async () => {
         let result = await _dbconnectionservice.getselectlistitem();
         if (result.success) {
             setSelectListItem(result.data);
         }
+    }
+    const onSave = () => {
+        jsoninputRef.current.getSonformValues()
+    }
+    const getjsonFormFiledValue = (readJsonConfig: ReadJsonConfig) => {
+        const { taskName, taskNumber,describe } = taskbasicState;
+        const param={
+            id:Guid.EMPTY.toString(),
+            taskName:taskName,
+            taskNumber:taskNumber,
+            taskType:props.taskType,
+            describe:describe,
+            taskConfig:JSON.stringify(readJsonConfig)
+        }
+        _scheduletaskservice.create(param)
+    }
+    /**
+     * 
+     * @param value 获取Json文件的配置
+     */
+    const gettaskbasicFormFiledValue = (taskbasic: any) => {
+        settaskbasicState(taskbasic)
     }
     /**
      * 关闭弹框
@@ -147,10 +183,39 @@ const TaskOperation = (props: IProp) => {
                 footer={[
                     <div key="foot" className="steps-action">
                         <Button key="cancel" style={{ margin: '0 8px' }} onClick={() => onCancel()}>取消</Button>
-                        <Button key="finesh" type="primary" onClick={() => message.success('Processing complete!')}>保存</Button>
+                        {current > 0 && (
+                            <Button key="previous" icon={<ArrowUpOutlined />} style={{ margin: '0 8px' }} onClick={() => prev()}>
+                                上一步
+                            </Button>
+                        )}
+                        {current < steps.length - 1 && (
+                            <Button key="next" type="primary" icon={<ArrowDownOutlined />} onClick={() => next()}>
+                                下一步
+                            </Button>
+                        )}
+                        {current === steps.length - 1 && (
+                            <Button key="finesh" type="primary" onClick={() => onSave()}>保存</Button>
+                        )}
                     </div>
                 ]}>
-                {jsonForm}
+                <Row className="task-step">
+                    <Steps current={current}>
+                        {steps.map(item => (
+                            <Step key={item.title} title={item.title} />
+                        ))}
+                    </Steps>
+                </Row>
+                {
+                    current < steps.length - 1 ?
+                        <TaskGeneralConfig taskbasicData={taskbasicState} onGetFormFiled={gettaskbasicFormFiledValue} onRef={taskbasicinputRef}></TaskGeneralConfig>
+                        : null
+
+                }
+                {
+                    props.taskType === TaskTypeEnum.ftpjson && current === steps.length - 1 ?
+                        <JsonForm ReadJsonConfigData={ReadJsonConfigState} onGetFormFiled={getjsonFormFiledValue} onRef={jsoninputRef}></JsonForm>
+                        : null
+                }
             </Modal>
         </div >
     );

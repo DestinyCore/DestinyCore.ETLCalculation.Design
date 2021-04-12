@@ -21,6 +21,6 @@ export default class DbConnectionService extends BaseService implements IDbConne
         return this.dataRequest.postRequest(DbconnApi.getpage,{})
     }
     create(_param:DBConnResourceInputDto): Promise<IServerReturn<any>> {
-        return this.dataRequest.postRequest(DbconnApi.importmetadataasync,_param)
+        return this.dataRequest.postRequest(DbconnApi.createasync,_param)
     }
 }

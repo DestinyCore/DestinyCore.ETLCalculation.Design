@@ -1,7 +1,7 @@
 /**
  * 任务类型
  */
-export enum TaskTypeEnum {
+export enum TaskTypeGroupEnum {
     /**
      * 数据库导入数据库任务
      */
@@ -14,7 +14,7 @@ export enum TaskTypeEnum {
 /**
  * 任务类型
  */
- export enum TaskInputTypeEnum {
+ export enum TaskTypeEnum {
     /**
      * 数据库导入数据库任务
      */

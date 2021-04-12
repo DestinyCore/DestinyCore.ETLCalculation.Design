@@ -1,5 +1,5 @@
 import { IEntity } from "../../../shard/entity/ibaseentity"
-import { TaskTypeEnum } from "./tasktype-enum"
+import {TaskTypeEnum } from "./tasktype-enum"
 
 /**
  任务管理基类
@@ -9,7 +9,7 @@ export class ScheduletTaskBase implements IEntity<string> {
     id: string = "";
     taskNumber: string = "";
     taskName: string = "";
-    taskType: TaskTypeEnum = TaskTypeEnum.input;
+    taskType: TaskTypeEnum = TaskTypeEnum.ftpjson;
     taskConfig: string = "";
     describe: string = "";
 }

@@ -17,14 +17,16 @@ const TaskPage = () => {
         title: "",
         visible: false
     })
+    const [taskTypeState, settaskTypeState] = useState<TaskTypeEnum>(TaskTypeEnum.ftpjson)
     const [cascader, setCascader] = useState({ visible: false });
     useEffect(() => {
     }, [OperationState]);
     /**
      * 级联选择事件
      */
-    const cascaderonChange = (value: any) => {
+    const cascaderonChange = (value: any,selectedOptions:any) => {
         setCascader({ visible: false });
+        settaskTypeState(value[value.length-1])
         setOperationState({
             itemId: Guid.EMPTY,
             title: "添加任务",
@@ -46,18 +48,17 @@ const TaskPage = () => {
     }
     const content = (
         <div>
-            <Cascader options={TaskTypeEnumList} onChange={cascaderonChange} placeholder="Please select" />,
+            <Cascader options={TaskTypeEnumList} onChange={cascaderonChange} placeholder="请选择任务类型" />,
         </div>
     );
     const _dbconnectionservice: IDbConnectionService = useHookProvider(IocTypes.DbConnectionService);
     const renderOperation = useMemo(() => {
-        return (<TaskOperation Config={OperationState}></TaskOperation>)
+        return (<TaskOperation Config={OperationState} taskType={taskTypeState}></TaskOperation>)
     }, [OperationState])
     /**
      * 对象定义
      */
     const [itemlist, setSelectListItem] = useState<Array<ISelectListItem>>([]);
-
     return (
         <div>
             <Row>

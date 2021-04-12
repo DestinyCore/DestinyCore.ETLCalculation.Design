@@ -1,4 +1,5 @@
-import { TaskInputTypeEnum, TaskTypeEnum } from './tasktype-enum'
+import { FieldTypeEnum } from './fieldtype-enum'
+import { TaskTypeEnum,TaskTypeGroupEnum } from './tasktype-enum'
 
 /**
  * 任务类型数组
@@ -6,20 +7,26 @@ import { TaskInputTypeEnum, TaskTypeEnum } from './tasktype-enum'
 export const TaskTypeEnumList: Array<any> = [
     {
         label: "输入",
-        value: TaskTypeEnum.input,
+        value: TaskTypeGroupEnum.input,
         children: [
             {
-                value: TaskInputTypeEnum.dataBase,
+                value: TaskTypeEnum.dataBase,
                 label: "数据表输入",
             },
             {
-                value: TaskInputTypeEnum.ftpjson,
+                value: TaskTypeEnum.ftpjson,
                 label: "Ftp-Json输入",
             },
             {
-                value: TaskInputTypeEnum.excel,
+                value: TaskTypeEnum.excel,
                 label: "Excel输入",
             }
         ]
+    }
+]
+export const FieldTypeEnumList: Array<any> = [
+    {
+        label: "String",
+        value: FieldTypeEnum.string,
     }
 ]
