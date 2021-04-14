@@ -35,7 +35,8 @@ const JsonForm = (props: IProp) => {
     });
     const callParent = () => {
         const readfrom = jsonReadConfigFormData.getFieldsValue();
-        props.onGetFormFiled && props.onGetFormFiled({ ftpConfig: jsoninputFormData.getFieldsValue(), jsonReadConfig: readfrom.readConfig })
+        const jsonconfig = jsoninputFormData.getFieldsValue()
+        props.onGetFormFiled && props.onGetFormFiled({ ftpConfig: jsonconfig, jsonReadConfig: readfrom.readConfig })
     }
     const onFinish = (values: any) => {
         console.log(jsonReadConfigFormData.getFieldsValue())
